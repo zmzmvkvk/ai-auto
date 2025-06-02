@@ -8,13 +8,12 @@ import { getFunctions, connectFunctionsEmulator } from "firebase/functions"; // 
 // Your web app's Firebase configuration
 // TODO: Firebase 콘솔에서 실제 프로젝트의 설정 값으로 교체해주세요.
 const firebaseConfig = {
-  apiKey: "AIzaSyAgBYqnkdG1OOK5sU7a65_2dlOpOa58aAk",
-  authDomain: "shorts-web-a00b4.firebaseapp.com",
-  projectId: "shorts-web-a00b4",
-  storageBucket: "shorts-web-a00b4.firebasestorage.app",
-  messagingSenderId: "263559494990",
-  appId: "1:263559494990:web:702c6f0b8ee5fbb527321f",
-  measurementId: "G-SLRW3CV082",
+  apiKey: "AIzaSyCIEsWYD9IeLf_o98qdNi0agrRBNMZfqa4",
+  authDomain: "sj-ai-auto.firebaseapp.com",
+  projectId: "sj-ai-auto",
+  storageBucket: "sj-ai-auto.firebasestorage.app",
+  messagingSenderId: "195284217325",
+  appId: "1:195284217325:web:50eef3a50ce850359f4be4",
 };
 
 // Firebase 앱 초기화
