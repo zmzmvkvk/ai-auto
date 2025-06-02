@@ -1,71 +1,38 @@
 // client/src/services/projectService.js
 
-// Mock API 함수: 프로젝트 목록 가져오기
+import { functions } from "../firebaseConfig"; // Firebase 설정 파일에서 functions 인스턴스 가져오기
+import { httpsCallable } from "firebase/functions"; // httpsCallable 함수 가져오기
+
+// Firebase Function 호출: 프로젝트 목록 가져오기
 export const fetchProjects = async () => {
-  console.log("Fetching projects from projectService...");
-  // 네트워크 지연 시뮬레이션
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  console.log("Calling Firebase Function: getProjectsList...");
+  try {
+    // 'getProjectsList'는 server/functions/index.js에서 export한 함수의 이름과 일치해야 합니다.
+    const getProjectsListFunction = httpsCallable(functions, "getProjectsList");
 
-  // 실제 API 호출 대신 사용할 목(Mock) 데이터
-  const mockProjects = [
-    {
-      id: "proj_1",
-      name: "나의 첫번째 모험 (서비스)",
-      lastModified: "3일 전",
-      thumbnail: null,
-    },
-    {
-      id: "proj_2",
-      name: "미래 도시 컨셉 (서비스)",
-      lastModified: "1일 전",
-      thumbnail: null,
-    },
-    {
-      id: "proj_3",
-      name: "숲 속의 비밀 (서비스)",
-      lastModified: "5시간 전",
-      thumbnail: null,
-    },
-    {
-      id: "proj_new",
-      name: "새로운 아이디어 (서비스)",
-      lastModified: "방금 전",
-      thumbnail: null,
-    },
-  ];
+    // 함수 호출 (필요시 데이터 전달 가능: getProjectsListFunction({ someData: 'hello' }))
+    const result = await getProjectsListFunction();
 
-  // 에러 시뮬레이션 (필요시 주석 해제하여 테스트)
-  // if (Math.random() > 0.7) {
-  //   throw new Error('Failed to fetch projects from mock service!');
-  // }
-
-  return mockProjects;
+    // 함수 결과는 result.data 에 담겨 옵니다.
+    console.log("Projects fetched from Firebase Function:", result.data);
+    return result.data; // Callable function은 result.data 안에 실제 응답 데이터를 담아 반환합니다.
+  } catch (error) {
+    console.error("Error calling getProjectsList Firebase Function:", error);
+    // react-query가 에러를 처리할 수 있도록 에러를 다시 throw 합니다.
+    // error.message 외에 error.code, error.details 등의 정보도 포함될 수 있습니다.
+    throw new Error(error.message || "Failed to fetch projects from Firebase.");
+  }
 };
 
-// 향후 실제 API 호출 함수 예시 (참고용)
+// 이전 목 API 함수는 이제 삭제하거나 주석 처리합니다.
 /*
-import axios from 'axios'; // 또는 fetch API 사용
-
-const API_BASE_URL = '/api'; // 실제 백엔드 API 경로에 맞게 수정
-
-export const fetchProjectsReal = async () => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/projects`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching projects:", error);
-    // 오류를 throw하여 react-query의 isError, error 상태로 전달
-    throw error; 
-  }
+export const fetchProjects_OLD_MOCK = async () => {
+  // ... (이전 목 데이터 로직) ...
 };
+*/
 
-export const createProject = async (projectData) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/projects`, projectData);
-    return response.data;
-  } catch (error) {
-    console.error("Error creating project:", error);
-    throw error;
-  }
-};
+// 향후 실제 API 호출 함수 예시 (참고용 - 이 부분은 그대로 두거나 삭제해도 됩니다)
+/*
+import axios from 'axios'; 
+// ... (이전 axios 예시) ...
 */

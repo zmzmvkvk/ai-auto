@@ -16,9 +16,17 @@
         "firebase-debug.*.log",
         "*.local"
       ],
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint"
-      ]
+      "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run lint"]
     }
-  ]
+  ],
+  "emulators": {
+    "functions": {
+      "port": 5001,
+      "host": "0.0.0.0" // 또는 "localhost" 명시
+    },
+    "firestore": {
+      "port": 8080,
+      "host": "0.0.0.0" // 일관성을 위해 다른 에뮬레이터에도 적용 가능
+    }
+  }
 }
