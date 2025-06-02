@@ -1,0 +1,80 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+*.swp
+*.swo
+
+# IDE & Editor specific files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+nbproject/
+project.xcworkspace/
+xcuserdata/
+
+# Node.js & npm/yarn
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json # (선택 사항: 팀 정책에 따라 포함하거나 제외)
+# client/package-lock.json # (선택 사항)
+# server/functions/package-lock.json # (선택 사항)
+lerna-debug.log*
+
+# Build & Output Directories
+dist/
+build/
+out/
+coverage/
+.vite/
+.next/ # (Next.js 사용 시, 현재는 Vite이므로 해당 없음)
+
+# Environment Variables
+.env
+.env.*
+!.env.example # .env.example 파일은 공유하도록 예외 처리
+
+# Firebase
+.firebase/                # Firebase CLI 캐시 및 설정
+*-debug.log               # Firebase Emulator 로그
+firebase-debug.log
+database-debug.log
+firestore-debug.log
+pubsub-debug.log
+storage-debug.log
+ui-debug.log
+
+# Client-specific ( Vite / React )
+# client/node_modules/ # 루트 node_modules/ 로 이미 커버됨
+client/dist/
+client/.vite/
+client/.env.local
+client/.env.development.local
+client/.env.test.local
+client/.env.production.local
+client/coverage/
+
+# Server-specific ( Firebase Functions )
+# server/functions/node_modules/ # 루트 node_modules/ 로 이미 커버됨
+server/functions/.env # (실제 .env 파일이 여기에 있다면)
+server/functions/lib/ # (TypeScript 컴파일 결과가 lib에 생성된다면)
+server/functions/coverage/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.orig
+
+# Specific to our project if any (e.g., large generated assets not meant for git)
+# client/src/assets/generated_large_files/
