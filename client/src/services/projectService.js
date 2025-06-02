@@ -1,43 +1,93 @@
 // client/src/services/projectService.js
-import { app, functions } from "../firebaseConfig"; // functions import 확인
-import { httpsCallable } from "firebase/functions"; // httpsCallable 추가
+import { app } from "../firebaseConfig";
 
 const FUNCTION_REGION = "us-central1";
-const PROJECT_ID = app.options.projectId;
+const PROJECT_ID = app.options.projectId || "sj-ai-auto";
 
-const createProjectUrl = import.meta.env.DEV
-  ? `http://localhost:5001/${PROJECT_ID}/${FUNCTION_REGION}/createProject`
-  : `https://${FUNCTION_REGION}-${PROJECT_ID}.cloudfunctions.net/createProject`;
+const getBaseUrl = () => {
+  if (import.meta.env.DEV) {
+    return `http://localhost:5001/${PROJECT_ID}/${FUNCTION_REGION}`;
+  } else {
+    return `https://${FUNCTION_REGION}-${PROJECT_ID}.cloudfunctions.net`;
+  }
+};
+
+export const fetchProjects = async () => {
+  const url = `${getBaseUrl()}/getProjectsList`;
+  console.log(`Calling HTTP Function: ${url}`);
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      let errorBody;
+      try {
+        errorBody = await response.json();
+      } catch (e) {
+        errorBody = { message: await response.text() };
+      }
+      console.error(
+        "Server responded with an error:",
+        response.status,
+        errorBody
+      );
+      throw new Error(
+        errorBody.message ||
+          errorBody.error ||
+          `Server error: ${response.status}`
+      );
+    }
+
+    const result = await response.json();
+    console.log("Projects fetched from HTTP Function:", result.data);
+    return result.data;
+  } catch (error) {
+    console.error("Error calling getProjectsList HTTP Function:", error);
+    throw error;
+  }
+};
 
 export const createProject = async (projectData) => {
-  // projectData는 { name: "프로젝트이름" } 형태
+  const url = `${getBaseUrl()}/createProject`;
   console.log(
     `Calling HTTP Function: createProject with data:`,
     projectData,
-    `to URL: ${createProjectUrl}`
+    `to URL: ${url}`
   );
   try {
-    const response = await fetch(createProjectUrl, {
-      method: "POST", // 데이터를 보내므로 POST 사용
+    const response = await fetch(url, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // TODO: 필요시 인증 토큰 추가: 'Authorization': 'Bearer YOUR_ID_TOKEN'
       },
-      // onRequest 함수는 request.body.data 또는 request.body에서 직접 데이터를 읽도록 설정할 수 있음
-      // Firebase HTTP Callable과 유사하게 { data: projectData } 형태로 감싸서 보냄
       body: JSON.stringify({ data: projectData }),
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Server responded with ${response.status}: ${errorText}`);
+      let errorBody;
+      try {
+        errorBody = await response.json();
+      } catch (e) {
+        errorBody = { message: await response.text() };
+      }
+      console.error(
+        "Server responded with an error during project creation:",
+        response.status,
+        errorBody
+      );
+      throw new Error(
+        errorBody.message ||
+          errorBody.error ||
+          `Server error: ${response.status}`
+      );
     }
 
     const result = await response.json();
     console.log("Project created via HTTP Function:", result.data);
-    return result.data; // 서버가 {data: {id: ..., ...}} 형태로 응답
+    return result.data;
   } catch (error) {
     console.error("Error calling createProject HTTP Function:", error);
-    throw new Error(error.message || "Failed to create project.");
+    throw error;
   }
 };
